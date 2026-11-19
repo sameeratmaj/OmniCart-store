@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router';
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
 import OrdersPage from "./pages/OrdersPage";
-import CheckoutReturnPage from "./pages/CheckoutReturnPage";
+import CheckoutReturnPage from "./pages/CheckOutReturnPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import { SentryDemoPage } from "./pages/SentryDemoPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
