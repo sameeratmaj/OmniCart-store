@@ -146,8 +146,10 @@ export async function polarWebhookHandler(req:Request, res:Response){
         // Acknowledge any other event types Polar may send
         res.json({ ok: true, ignored: true });
 
-    }catch(err){
-        console.error("Polar webhook error", err);
-        res.status(400).json({error: "Invalid webhook"});
+    }catch(err: unknown){
+        const message =
+          err instanceof Error ? err.message : "Unknown verification error";
+        console.error("Polar webhook error:", message, err);
+        res.status(400).json({ error: "Invalid webhook", detail: message });
     }
 }
