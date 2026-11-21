@@ -1,7 +1,13 @@
-import { Show, SignInButton, SignUpButton, useAuth, UserButton } from '@clerk/react'
-import PageLoader from './components/PageLoader';
-import Layout from './components/Layout';
-import { Routes, Route } from 'react-router';
+import {
+  Show,
+  SignInButton,
+  SignUpButton,
+  useAuth,
+  UserButton,
+} from "@clerk/react";
+import PageLoader from "./components/PageLoader";
+import Layout from "./components/Layout";
+import { Routes, Route, Navigate } from "react-router";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
 import OrdersPage from "./pages/OrdersPage";
@@ -15,10 +21,9 @@ import OrderVideoPage from "./pages/OrderVideoPage";
 import AdminProductsPage from "./pages/AdminProductsPage";
 
 function App() {
-  
   const { isLoaded, isSignedIn } = useAuth();
-  
-  if(!isLoaded) return <PageLoader/>; 
+
+  if (!isLoaded) return <PageLoader />;
 
   return (
     <>
@@ -29,7 +34,9 @@ function App() {
           <Route path="/product/:slug" element={<ProductDetailPage />} />
           <Route
             path="/orders"
-            element={isSignedIn ? <OrdersPage /> : <Navigate to={"/"} replace />}
+            element={
+              isSignedIn ? <OrdersPage /> : <Navigate to={"/"} replace />
+            }
           />
           <Route path="/checkout/return" element={<CheckoutReturnPage />} />
 
@@ -37,12 +44,16 @@ function App() {
 
           <Route
             path="/orders/:id/call"
-            element={isSignedIn ? <OrderVideoPage /> : <Navigate to={"/"} replace />}
+            element={
+              isSignedIn ? <OrderVideoPage /> : <Navigate to={"/"} replace />
+            }
           />
 
           <Route
             path="/admin"
-            element={isSignedIn ? <AdminProductsPage /> : <Navigate to="/" replace />}
+            element={
+              isSignedIn ? <AdminProductsPage /> : <Navigate to="/" replace />
+            }
           />
 
           {/* NESTED ROUTES */}
@@ -53,9 +64,7 @@ function App() {
         </Routes>
       </Layout>
     </>
-
-    
-  )
+  );
 }
 
-export default App
+export default App;
