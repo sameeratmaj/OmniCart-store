@@ -7,12 +7,12 @@ WORKDIR /app/frontend
 COPY frontend/ ./
 # Empty = browser calls /api on the same host as the page (same domain as Express).
 ENV VITE_API_URL=
-# Uprush exposes project variables to Docker build steps as BuildKit secrets,
-# not as build args. Vite embeds these public settings in the client bundle.
-RUN --mount=type=secret,id=VITE_CLERK_PUBLISHABLE_KEY,env=VITE_CLERK_PUBLISHABLE_KEY \
-    --mount=type=secret,id=VITE_IMAGEKIT_URL_ENDPOINT,env=VITE_IMAGEKIT_URL_ENDPOINT \
-    --mount=type=secret,id=VITE_SENTRY_DSN,env=VITE_SENTRY_DSN \
-    npm install --no-audit --no-fund \
+# Render passes env vars as Docker build args (not BuildKit secrets).
+# ARG receives them; Vite reads process.env during build to embed in the bundle.
+ARG VITE_CLERK_PUBLISHABLE_KEY
+ARG VITE_IMAGEKIT_URL_ENDPOINT
+ARG VITE_SENTRY_DSN
+RUN npm install --no-audit --no-fund \
   && npm run build
 
 
