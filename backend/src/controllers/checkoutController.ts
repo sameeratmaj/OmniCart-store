@@ -38,6 +38,7 @@ export async function createCheckout(req: Request, res: Response, next: NextFunc
 
         if(!env.POLAR_ACCESS_TOKEN){
             res.status(503).json({ error: "Payments are not configured" });
+            return;
         }
 
         const localUser = await getLocalUser(userId);

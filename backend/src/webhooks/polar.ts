@@ -88,7 +88,8 @@ export async function polarWebhookHandler(req:Request, res:Response){
         }
 
         const raw = req.body instanceof Buffer ? req.body : Buffer.from(String(req.body));
-        const wh = new Webhook(Buffer.from(env.POLAR_WEBHOOK_SECRET, "utf8").toString("base64"));
+        const secret = env.POLAR_WEBHOOK_SECRET.replace(/^whsec_/, "");
+        const wh = new Webhook(secret);
 
         const id = headerString(req.headers, "webhook-id");
         const ts = headerString(req.headers, "webhook-timestamp");
@@ -142,6 +143,8 @@ export async function polarWebhookHandler(req:Request, res:Response){
             }
         }
 
+        // Acknowledge any other event types Polar may send
+        res.json({ ok: true, ignored: true });
 
     }catch(err){
         console.error("Polar webhook error", err);
