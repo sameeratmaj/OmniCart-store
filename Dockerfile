@@ -7,10 +7,12 @@ WORKDIR /app/frontend
 COPY frontend/ ./
 # Empty = browser calls /api on the same host as the page (same domain as Express).
 ENV VITE_API_URL=
-# Public Clerk key (safe to pass as build-arg; it is embedded in client JS anyway)
-ARG VITE_CLERK_PUBLISHABLE_KEY
-ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
-RUN npm install --no-audit --no-fund \
+# Uprush exposes project variables to Docker build steps as BuildKit secrets,
+# not as build args. Vite embeds these public settings in the client bundle.
+RUN --mount=type=secret,id=VITE_CLERK_PUBLISHABLE_KEY,env=VITE_CLERK_PUBLISHABLE_KEY \
+    --mount=type=secret,id=VITE_IMAGEKIT_URL_ENDPOINT,env=VITE_IMAGEKIT_URL_ENDPOINT \
+    --mount=type=secret,id=VITE_SENTRY_DSN,env=VITE_SENTRY_DSN \
+    npm install --no-audit --no-fund \
   && npm run build
 
 
